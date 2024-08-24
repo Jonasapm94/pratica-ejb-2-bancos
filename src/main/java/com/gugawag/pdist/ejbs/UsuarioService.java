@@ -46,8 +46,10 @@ public class UsuarioService {
 
     boolean hasPalavrao(String mensagem){
         System.out.println("Mensagem que chegou para ser verificada se há palavrão: " + mensagem);
-        String[] palavras = mensagem.split(mensagem);
+        String[] palavras = mensagem.split(" ");
         for (String palavra : palavras){
+            System.out.println(palavra);
+            System.out.println(palavra.length());
             // Verifica se existe uma palavra muito grande...
             if (palavra.length() > 10){
                 return true;
