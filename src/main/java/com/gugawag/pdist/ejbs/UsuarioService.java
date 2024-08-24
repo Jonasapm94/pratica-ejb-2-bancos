@@ -6,6 +6,7 @@ import com.gugawag.pdist.model.Usuario;
 import javax.ejb.EJB;
 import javax.ejb.Remote;
 import javax.ejb.Stateless;
+
 import java.util.List;
 
 @Stateless(name = "usuarioService")
@@ -22,17 +23,37 @@ public class UsuarioService {
         return usuarioDao.listar();
     }
 
-    public void inserir(long id, String nome) {
+    public List<Mensagem> listarMensagens(){
+        return mensagemDao.listar();
+    }
+
+    public void inserir(long id, String nome, String msg) {
         Usuario novoUsuario = new Usuario(id, nome);
         usuarioDao.inserir(novoUsuario);
 
-        Mensagem mensagem = new Mensagem();
-//        mensagemDao.inserir(mensagem);
+        Mensagem mensagem = new Mensagem(id, msg);
+        mensagemDao.inserir(mensagem);
         if (id==3L) {
             throw new RuntimeException("Menor de idade não permitido!");
         }
         if (id == 4L) {
             novoUsuario.setNome(nome + " alterado");
         }
+        if (hasPalavrao(msg)){
+            throw new RuntimeException("Mensagem contém palavrão!");
+        }
+    }
+
+    boolean hasPalavrao(String mensagem){
+        System.out.println("Mensagem que chegou para ser verificada se há palavrão: " + mensagem);
+        String[] palavras = mensagem.split(mensagem);
+        for (String palavra : palavras){
+            // Verifica se existe uma palavra muito grande...
+            if (palavra.length() > 10){
+                return true;
+            }
+        }
+
+        return false;
     }
 }
